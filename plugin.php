@@ -131,6 +131,24 @@ class Yoast_To_REST_API {
 			'yoast_wpseo_metadesc'  => $wpseo_frontend->metadesc( false ),
 			'yoast_wpseo_canonical' => $wpseo_frontend->canonical( false ),
 		);
+		$social = [
+			'yoast_wpseo_opengraph-title',
+			'yoast_wpseo_opengraph-description',
+			'yoast_wpseo_opengraph-image',
+			'yoast_wpseo_twitter-title',
+			'yoast_wpseo_twitter-description',
+			'yoast_wpseo_twitter-image'
+		];
+		$yoast_meta = array_merge(
+			[
+				'yoast_wpseo_title'     => $wpseo_frontend->get_content_title(),
+				'yoast_wpseo_metadesc'  => $wpseo_frontend->metadesc( false ),
+				'yoast_wpseo_canonical' => $wpseo_frontend->canonical( false ),
+			],
+			...array_map(function($key) use ($p) {
+				return [$key => get_post_meta($p['id'], '_' . $key, true)];
+			}, $social)
+		);
 
 		wp_reset_query();
 
